@@ -28,10 +28,14 @@ namespace Meek
             var contentMarkup = content.Contents;
             var constructedContent = string.Empty;
 
+            var razorVersion = System.Configuration.ConfigurationManager.AppSettings["webpages:Version"];
+
             switch (_viewEngine.Type)
             {
                 case ViewEngineType.Razor:
-                    contentMarkup = contentMarkup.Replace("@", "@@");
+                    if (razorVersion != null 
+                        && razorVersion == "1.0.0.0")
+                        contentMarkup = contentMarkup.Replace("@", "@@");
                     contentMarkup = AddRazorEditLinkMarkup(contentMarkup, content.Partial);
                     constructedContent = string.Format(
                         "@{{ {0} ViewBag.Title = \"{1}\";}} {2}",
